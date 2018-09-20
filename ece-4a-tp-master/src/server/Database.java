@@ -52,6 +52,12 @@ public class Database {
 			 * - ObjectInputStream
 			 */
 			
+			FileInputStream fileIn = new FileInputStream(filepath);
+			ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+			Object data = objectIn.readObject();
+			objectIn.close();
+		
+			
 
 		} else {
 			System.out.println("Le fichier de sauvegarde n'existe pas.");
@@ -73,6 +79,15 @@ public class Database {
 		 * - FileOutputStream
 		 * - ObjectOutputStream
 		 */
+		
+		
+		
+		FileOutputStream fileOut = new FileOutputStream(filepath);
+		ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+		objectOut.writeObject(data);
+		objectOut.close();
+		
+		
 		
 
 		

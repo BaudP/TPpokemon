@@ -38,8 +38,8 @@ public class PokemonBank {
 	
 	/**
 	 * Constructor
-	 * @param port		the port on which the server should listen
-	 * @param fileName	the name of the file used for the database
+	 //* @param port		the port on which the server should listen
+	 //* @param fileName	the name of the file used for the database
 	 * @throws IOException
 	 * @throws ClassNotFoundException 
 	 */
@@ -48,6 +48,7 @@ public class PokemonBank {
 		 * TODO
 		 * Here, you should initialize the Database and ServerSocket instances.
 		 */
+		socketserver = new ServerSocket(3000);//On initialise le socket avec le port 3000
 		
 
 		System.out.println("Banque PokÃ©mon (" + DB_FILE_NAME + ") dÃ©marrÃ©e sur le port " + SERVER_PORT);
@@ -68,7 +69,9 @@ public class PokemonBank {
 		 * TODO
 		 * Here, you should wait for a client to connect.
 		 */
-		
+		private Socket socket = null;
+		socket = server.accept();
+		System.out.println("Un client s'est connecté");
 		
 		/*
 		 * TODO
@@ -78,7 +81,8 @@ public class PokemonBank {
 		 * - ObjectOutputStream
 		 * - BankOperation
 		 */
-		
+		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		out = new PrintWriter(socket.getOutputStream());
 		
 		// For as long as the client wants it
 		boolean running = true;
@@ -87,6 +91,7 @@ public class PokemonBank {
 			 * TODO
 			 * Here you should read the stream to retrieve a Request object
 			 */
+			Request=in.readObject();
 			Request request;
 			
 			/*
@@ -100,6 +105,7 @@ public class PokemonBank {
 					 * TODO
 					 * There is no PokÃ©mons, so just send a message to the client using the output stream.
 					 */
+					out.println("Il n'y a pas de Pokémon");
 					
 				} else {
 					/*
@@ -111,7 +117,17 @@ public class PokemonBank {
 					 * - String
 					 * - the output stream
 					 */
-					
+					StringWriter sw = new StringWriter();
+				    StringReader sr;
+				    sr =new StringReader(sw.toString());
+				    int i;
+				    int j=0;
+					String str = "";
+					while((i=sr.read())!=-1)//Tant qu'il reste des choses à lire 
+						str+=(out.append(pokemons[j])) ;//On va ajouter les pokémons dans le string
+						j+=j;
+					System.out.println(str);
+					out.flush();
 				}
 				break;
 				
@@ -126,8 +142,16 @@ public class PokemonBank {
 				
 				/*
 				 * TODO
-				 * Then, send a message to the client so he knows his PokÃ©mon is safe.
+				 * Then, send a message to the client so he knows his PokÃ©mon is safe Name and level.
 				 */
+				int i;
+				for (int i = 0; i < this.pokemons.size(); i++) {
+					if (i > 0) {
+						System.out.print(", ");
+					}
+					out.println(this.pokemons.get(i).toString() + "a bien été reçu");
+				}
+				
 				
 
 				break;
@@ -138,6 +162,8 @@ public class PokemonBank {
 				 * TODO
 				 * Here, you should use the output stream to send a nice 'Au revoir !' message to the client. 
 				 */
+				out.println("Nous vous souhaitons une très bonne journée");
+				out.flush();
 				
 				// Closing the connection
 				System.out.println("Fermeture de la connexion...");
@@ -151,6 +177,9 @@ public class PokemonBank {
 		 * TODO
 		 * Now you can close both I/O streams, and the client socket.
 		 */
+		in.close();
+		out.close();
+		server.close();
 		
 		/*
 		 * TODO

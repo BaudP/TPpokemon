@@ -44,7 +44,11 @@ public class PokemonTrainer {
 		 * TODO
 		 * Here you initialize the socket, the input stream, and the output stream
 		 */
-		
+		InputStream= new ObjectInputStream();
+		OutputStream= new ObjectOutputStream();
+		 
+	    socket = new Socket(InetAddress.getLocalHost(),3000);	
+	    socket.close();
 	}
 	
 	/**
@@ -100,7 +104,7 @@ public class PokemonTrainer {
 		 * TODO
 		 * Here you should close both I/O streams and the socket.
 		 */
-		
+		client.close();
 	}
 	
 	/**
